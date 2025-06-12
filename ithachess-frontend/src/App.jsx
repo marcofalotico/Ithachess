@@ -48,10 +48,10 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home players={players} matches={matches} />} />
         <Route path="/ranking" element={<Ranking players={players} />} />
         <Route path="/history" element={<MatchHistory matches={matches} />} />
-        <Route path="/form" element={<Form onMatchSaved={() => { refreshPlayers(); refreshMatches() }} players={players} />} />
+        <Route path="/form" element={<Form onMatchSaved={() => { refreshPlayers(); refreshMatches() }} players={players} refreshPlayers={refreshPlayers} />} />
         <Route path="/headtohead" element={<HeadToHeadPage players={players} />} />
       </Routes>
     </div>

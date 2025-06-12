@@ -13,6 +13,25 @@ app.use(express.json())
 const dbPath = 'C:/Users/MarcoAndresFalotico/Documents/ithachess-platform/ithachess-backend/ithachess.db'
 const db = new sqlite3.Database(dbPath)
 
+// 🔹 Aggiunta giocatore
+app.post('/api/players', (req, res) => {
+  const { name } = req.body
+  if (!name || name.trim() === '') {
+    return res.status(400).json({ error: 'Nome mancante o non valido' })
+  }
+
+  const sql = `INSERT INTO players (name, elo) VALUES (?, 400)`
+  db.run(sql, [name.trim()], function (err) {
+    if (err) {
+      console.error('❌ Errore inserimento giocatore:', err.message)
+      return res.status(500).json({ error: 'Errore nel salvataggio del giocatore' })
+    }
+
+    console.log(`✅ Aggiunto nuovo giocatore con ID ${this.lastID}`)
+    res.json({ id: this.lastID, name, elo: 400 })
+  })
+})
+
 // 🔹 Classifica
 app.get('/api/players', (req, res) => {
   db.all(`SELECT id, name, elo FROM players ORDER BY elo DESC`, [], (err, rows) => {

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import HeadToHeadChart from '../components/HeadToHeadChart'
+
 
 function HeadToHead({ players }) {
   const [p1, setP1] = useState('')
@@ -30,6 +32,10 @@ function HeadToHead({ players }) {
     }
   })
 
+  const name1 = players.find(p => p.id == p1)?.name || ''
+  const name2 = players.find(p => p.id == p2)?.name || ''
+
+
   return (
     <div className="p-4 mt-10">
       <h2 className="text-xl font-bold mb-4 text-center">Testa a Testa</h2>
@@ -49,6 +55,12 @@ function HeadToHead({ players }) {
         </select>
       </div>
 
+      {p1 && p2 && matches.length > 0 && (
+        <HeadToHeadChart playerA={name1} playerB={name2} matches={matches} />
+      )}
+
+
+      {/* Statistiche + tabella */}
       {matches.length > 0 && (
         <>
           <div className="text-center mb-4">

@@ -37,8 +37,6 @@ CREATE TABLE matches (
 ### Operazioni:
 - Creazione database `ithachess.db`
 - Inserimento dati via interfaccia o via SQL (`Execute SQL`)
-- Aggiunta colonna `result_type` per gestire i tipi di risultato
-- Rimozione del `DEFAULT CURRENT_TIMESTAMP` e gestione manuale dell'orario via backend
 
 ---
 
