@@ -1,7 +1,6 @@
-
 # 🧠 Progetto Ithachess - Guida completa
 
-Questa guida contiene tutti i passaggi eseguiti finora per creare il progetto **Ithachess**: una piattaforma per tracciare partite di scacchi tra colleghi, con punteggi Elo aggiornabili.
+Questa guida contiene tutti i passaggi eseguiti finora per creare il progetto **Ithachess**: una piattaforma per tracciare partite di scacchi dal vivo in ufficio, con punteggi Elo aggiornabili.
 
 ---
 
@@ -142,5 +141,7 @@ Apri il browser su [http://localhost:5173](http://localhost:5173)
 - Classifica aggiornata automaticamente dopo ogni partita
 - Storico aggiornato automaticamente dopo ogni partita
 - Confronto testa a testa tra due giocatori
+- Routing con React Router e pagine dedicate:
+  - `/ranking`, `/form`, `/history`, `/headtohead`
 
 ---

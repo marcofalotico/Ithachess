@@ -1,13 +1,12 @@
-
 # 📘 Guida per imparare React con Ithachess
 
-Questa guida è pensata per te che vuoi imparare React partendo dal progetto Ithachess, costruito passo dopo passo.
+Questa guida è pensata per imparare React partendo dal progetto Ithachess, costruito passo dopo passo.
 
 ---
 
 ## 🔁 1. Cos'è React
 
-React è una **libreria JavaScript** per costruire interfacce utente. Ti permette di creare **componenti riutilizzabili** che si aggiornano automaticamente quando cambiano i dati.
+React è una **libreria JavaScript** per costruire interfacce utente. Permette di creare **componenti riutilizzabili** che si aggiornano automaticamente quando cambiano i dati.
 
 ---
 
@@ -17,7 +16,7 @@ React è una **libreria JavaScript** per costruire interfacce utente. Ti permett
 const [players, setPlayers] = useState([])
 ```
 
-`useState` ti serve per **salvare dati temporanei** in un componente (ad esempio, la lista dei giocatori).
+`useState` serve per **salvare dati temporanei** in un componente (ad esempio, la lista dei giocatori).
 
 - `players` è il valore
 - `setPlayers` è la funzione che lo aggiorna
@@ -61,8 +60,8 @@ Nel nostro caso:
 
 - `App.jsx` → gestisce lo stato globale (`players`, `matches`) e aggiorna tutto
 - `PlayerList.jsx` → mostra la classifica ordinata
-- `MatchForm.jsx` → permette di registrare una nuova partita
 - `MatchHistory.jsx` → mostra lo storico delle partite
+- `MatchForm.jsx` → permette di registrare una nuova partita
 - `HeadToHead.jsx` → permette di selezionare due giocatori e confrontarli
 
 ---
@@ -76,13 +75,39 @@ Ogni volta che salvi una nuova partita:
 
 ---
 
+## 🌍 7. React Router
+
+React Router ti permette di creare una **Single Page Application con più pagine virtuali**.
+
+### Installazione
+
+```bash
+npm install react-router-dom
+```
+
+### Esempio di routing:
+
+```jsx
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/ranking" element={<Ranking players={players} />} />
+</Routes>
+```
+
+### Cosa cambia?
+
+- I componenti non vengono più mostrati tutti nella stessa pagina
+- Ogni “pagina” ha un suo path (`/ranking`, `/form`, `/headtohead`)
+- La navigazione è più ordinata e modulare
+
+---
+
 ## ✅ Best practice React
 
 - Stato globale in `App` = più controllo
 - Niente `fetch` dentro i componenti se puoi usare `props`
 - `useEffect` solo dove serve
-- Tieni tutto separato in file `.jsx` leggibili e riutilizzabili
+- Separazione logica in file `.jsx` leggibili e riutilizzabili
+- Usa `react-router-dom` per gestire più viste nel progetto
 
 ---
-
-Vuoi fare un altro passo avanti? Studia `useContext`, `useReducer` e React Router.

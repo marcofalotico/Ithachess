@@ -1,55 +1,59 @@
 // 📁 src/App.jsx
-
 import React, { useEffect, useState } from 'react'
-import PlayerList from './components/PlayerList'
-import MatchForm from './components/MatchForm'
-import MatchHistory from './components/MatchHistory'
-import HeadToHead from './components/HeadToHead'
+import { Routes, Route, Link } from 'react-router-dom'
 
-
-
-
-// Questo è il componente principale della nostra app React.
-// React utilizza JSX: sembra HTML, ma in realtà è JavaScript.
-// Il componente App verrà montato nella div con id="root" del file index.html.
+import Home from './pages/Home' /* Home */
+import Ranking from './pages/Ranking' /* Classifica */
+import MatchHistory from './pages/MatchHistory' /* Storico */
+import Form from './pages/Form' /* Registra */
+import HeadToHeadPage from './pages/HeadToHead' /* Head to Head */
 
 function App() {
+  const [players, setPlayers] = useState([])       // ✅ Stato per la classifica
+  const [matches, setMatches] = useState([])       // ✅ Stato per lo storico
 
-  // Funzione per caricare la classifica aggiornata
-  const [players, setPlayers] = useState([])
+  // Al primo render, carico dati da backend
+  useEffect(() => {
+    fetch('http://localhost:3001/api/players')
+      .then(res => res.json())
+      .then(data => setPlayers(data))
+
+    fetch('http://localhost:3001/api/matches')
+      .then(res => res.json())
+      .then(data => setMatches(data))
+  }, [])
+
+  // Funzione per ricaricare classifica
   const refreshPlayers = () => {
     fetch('http://localhost:3001/api/players')
       .then(res => res.json())
       .then(data => setPlayers(data))
-      .catch(err => console.error('Errore fetch players:', err))
   }
 
-  // Carico i giocatori al primo avvio
-  useEffect(() => {
-    refreshPlayers()
-  }, [])
-
-  const [matches, setMatches] = useState([])
-
+  // Funzione per ricaricare storico
   const refreshMatches = () => {
     fetch('http://localhost:3001/api/matches')
       .then(res => res.json())
       .then(data => setMatches(data))
   }
 
-  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">Ithachess ♟️</h1>
-      <PlayerList players={players} />
-      <MatchForm onMatchSaved={() => {
-        refreshPlayers()
-        refreshMatches()
-      }} players={players} />
-      <MatchHistory matches={matches} />
-      <HeadToHead players={players} />
+    <div className="min-h-screen bg-gray-100">
+      <nav className="bg-white shadow p-4 flex gap-4">
+        <Link to="/">🏠 Home</Link>
+        <Link to="/ranking">📊 Classifica</Link>
+        <Link to="/history">📜 Storico</Link>
+        <Link to="/form">➕ Registra</Link>
+        <Link to="/headtohead">⚔️ Confronta</Link>
+      </nav>
 
-
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/ranking" element={<Ranking players={players} />} />
+        <Route path="/history" element={<MatchHistory matches={matches} />} />
+        <Route path="/form" element={<Form onMatchSaved={() => { refreshPlayers(); refreshMatches() }} players={players} />} />
+        <Route path="/headtohead" element={<HeadToHeadPage players={players} />} />
+      </Routes>
     </div>
   )
 }
