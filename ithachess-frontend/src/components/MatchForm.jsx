@@ -1,4 +1,8 @@
+// 📁 src/components/MatchForm.jsx
+
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchPlayers } from '../store/playersSlice'
 
 // ✅ Aggiungiamo anche `refreshPlayers` come prop
 function MatchForm({ players, onMatchSaved, refreshPlayers }) {
@@ -7,6 +11,9 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
   const [winner, setWinner] = useState('')
   const [mode, setMode] = useState('blitz')
   const [newPlayerName, setNewPlayerName] = useState('')
+
+  const dispatch = useDispatch()
+
 
   // 🟢 Funzione che salva una nuova partita
   const handleSubmit = (e) => {
@@ -58,7 +65,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
       .then(() => {
         alert('Giocatore aggiunto!')
         setNewPlayerName('')
-        if (refreshPlayers) refreshPlayers()  // ✅ aggiorna elenco giocatori
+        dispatch(fetchPlayers()) // 🔁 aggiorna Redux
       })
       .catch(err => console.error(err))
   }

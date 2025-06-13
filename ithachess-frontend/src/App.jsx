@@ -1,36 +1,33 @@
 // 📁 src/App.jsx
+
 import React, { useEffect, useState } from 'react'
 import { Routes, Route, Link } from 'react-router-dom'
-
-import Home from './pages/Home' /* Home */
-import Ranking from './pages/Ranking' /* Classifica */
-import MatchHistory from './pages/MatchHistory' /* Storico */
-import Form from './pages/Form' /* Registra */
-import HeadToHeadPage from './pages/HeadToHead' /* Head to Head */
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchPlayers } from './store/playersSlice'
+import Home from './pages/Home'
+import Ranking from './pages/Ranking'
+import MatchHistory from './pages/MatchHistory'
+import Form from './pages/Form'
+import HeadToHeadPage from './pages/HeadToHead'
 
 function App() {
-  const [players, setPlayers] = useState([])       // ✅ Stato per la classifica
-  const [matches, setMatches] = useState([])       // ✅ Stato per lo storico
+  const dispatch = useDispatch()
 
-  // Al primo render, carico dati da backend
+  // ✅ prende i giocatori da Redux
+  const players = useSelector(state => state.players.list)
+
+  // ✅ mantiene lo stato locale solo per i match
+  const [matches, setMatches] = useState([])
+
+  // 🔁 al primo render, carica dati da Redux e API
   useEffect(() => {
-    fetch('http://localhost:3001/api/players')
-      .then(res => res.json())
-      .then(data => setPlayers(data))
-
+    dispatch(fetchPlayers())
     fetch('http://localhost:3001/api/matches')
       .then(res => res.json())
       .then(data => setMatches(data))
-  }, [])
+  }, [dispatch])
 
-  // Funzione per ricaricare classifica
-  const refreshPlayers = () => {
-    fetch('http://localhost:3001/api/players')
-      .then(res => res.json())
-      .then(data => setPlayers(data))
-  }
-
-  // Funzione per ricaricare storico
+  // 🔁 aggiorna solo i match (i players li gestisce Redux)
   const refreshMatches = () => {
     fetch('http://localhost:3001/api/matches')
       .then(res => res.json())
@@ -51,7 +48,7 @@ function App() {
         <Route path="/" element={<Home players={players} matches={matches} />} />
         <Route path="/ranking" element={<Ranking players={players} />} />
         <Route path="/history" element={<MatchHistory matches={matches} />} />
-        <Route path="/form" element={<Form onMatchSaved={() => { refreshPlayers(); refreshMatches() }} players={players} refreshPlayers={refreshPlayers} />} />
+        <Route path="/form" element={<Form players={players} onMatchSaved={refreshMatches} />} />
         <Route path="/headtohead" element={<HeadToHeadPage players={players} />} />
       </Routes>
     </div>
