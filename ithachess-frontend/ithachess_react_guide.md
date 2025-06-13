@@ -1,33 +1,30 @@
 # 📘 Guida per imparare React con Ithachess
 
-Questa guida è pensata per imparare React partendo dal progetto Ithachess, costruito passo dopo passo.
+Questa guida spiega tutto quello che si è usato per creare l'app.
 
 ---
 
 ## 🔁 1. Cos'è React
 
-React è una **libreria JavaScript** per costruire interfacce utente. Permette di creare **componenti riutilizzabili** che si aggiornano automaticamente quando cambiano i dati.
+React è una libreria JavaScript che permette di creare **interfacce utente dinamiche**.
+
+In React tutto ruota intorno ai **componenti**.
 
 ---
 
-## 🔧 2. useState – lo stato
+## 🔧 2. useState – lo stato locale
 
-```js
+```jsx
 const [players, setPlayers] = useState([])
 ```
 
-`useState` serve per **salvare dati temporanei** in un componente (ad esempio, la lista dei giocatori).
-
-- `players` è il valore
-- `setPlayers` è la funzione che lo aggiorna
-
-Quando chiami `setPlayers(...)`, React **ri-renderizza il componente** con i nuovi dati.
+Ti permette di **memorizzare dati all'interno di un componente**. Ogni volta che aggiorni lo stato con `setPlayers(...)`, il componente si aggiorna.
 
 ---
 
 ## 🌍 3. useEffect – effetto collaterale
 
-```js
+```jsx
 useEffect(() => {
   fetch('/api/players')
     .then(res => res.json())
@@ -35,79 +32,93 @@ useEffect(() => {
 }, [])
 ```
 
-`useEffect` serve per **eseguire codice una volta** (es. caricamento dati da backend).
-
-- Il secondo parametro `[]` dice “esegui solo al primo caricamento”.
-- Se metti `[qualcosa]`, lo esegue ogni volta che “qualcosa” cambia.
+Serve per eseguire codice al caricamento del componente (ad es. recuperare dati).
 
 ---
 
-## 📤 4. props – dati da padre a figlio
+## 📤 4. props – passaggio dati tra componenti
 
-```js
+```jsx
 function PlayerList({ players }) { ... }
 ```
 
-Le `props` sono il modo in cui **un componente genitore passa dati ai figli**.
-
-Nel nostro caso:
-- `App` gestisce i dati globali
-- Li passa a `PlayerList`, `MatchForm`, `MatchHistory`
+Le `props` servono a **passare dati dal componente genitore (App) ai componenti figli (come PlayerList)**.
 
 ---
 
-## 🧩 5. Com'è strutturata l'app
+## 🧱 5. Struttura e responsabilità dei file
 
-- `App.jsx` → gestisce lo stato globale (`players`, `matches`) e aggiorna tutto
-- `PlayerList.jsx` → mostra la classifica ordinata
-- `MatchHistory.jsx` → mostra lo storico delle partite
-- `MatchForm.jsx` → permette di registrare una nuova partita
-- `HeadToHead.jsx` → permette di selezionare due giocatori e confrontarli
-
----
-
-## 📬 6. Aggiornamento automatico
-
-Ogni volta che salvi una nuova partita:
-- React chiama `onMatchSaved()` dal `MatchForm`
-- Questa funzione aggiorna sia la classifica (`refreshPlayers`) che lo storico (`refreshMatches`)
-- Entrambi vengono aggiornati in tempo reale grazie a `useState` + `props`
+- **main.jsx**    → punto di ingresso. Qui si importa React, si collega lo store Redux e si importa `index.css`.
+- **App.jsx**     → definisce tutte le rotte, gestisce fetch e funzioni principali, è il "cervello" dell'app.
+- **componenti**  → oggetti riutilizzabili per layout e logica (es. MatchForm, PlayerList)
+- **pagine**      → rappresentano le schermate principali (`/ranking`, `/form`, ecc.)
 
 ---
 
-## 🌍 7. React Router
-
-React Router ti permette di creare una **Single Page Application con più pagine virtuali**.
-
-### Installazione
+## 🔀 6. React Router – multipagina
 
 ```bash
 npm install react-router-dom
 ```
 
-### Esempio di routing:
+Con React Router si possono usare più URL per mostrare pagine diverse:
 
 ```jsx
 <Routes>
   <Route path="/" element={<Home />} />
-  <Route path="/ranking" element={<Ranking players={players} />} />
+  <Route path="/form" element={<Form />} />
 </Routes>
 ```
 
-### Cosa cambia?
-
-- I componenti non vengono più mostrati tutti nella stessa pagina
-- Ogni “pagina” ha un suo path (`/ranking`, `/form`, `/headtohead`)
-- La navigazione è più ordinata e modulare
+**Perché è utile:** permette di dividere l’interfaccia in pagine (routing), rendendo l'app ordinata.
 
 ---
 
-## ✅ Best practice React
+## 🧠 7. Redux – stato globale
 
-- Stato globale in `App` = più controllo
-- Niente `fetch` dentro i componenti se puoi usare `props`
-- `useEffect` solo dove serve
-- Separazione logica in file `.jsx` leggibili e riutilizzabili
-- Usa `react-router-dom` per gestire più viste nel progetto
+```bash
+npm install @reduxjs/toolkit react-redux
+```
+
+Redux centralizza lo stato in un’unica fonte condivisa da tutta l’app. Non si usa più `useState` in App per i giocatori, ma:
+
+```jsx
+const players = useSelector(state => state.players.list)
+```
+
+e lo aggiorni tramite:
+
+```js
+dispatch(fetchPlayers())
+```
+
+**Differenza rispetto a useState**:
+- `useState` → dati locali a un singolo componente
+- `Redux` → dati accessibili da tutta l'app
 
 ---
+
+## 🧠 Esempio finale
+
+```jsx
+// main.jsx
+<Provider store={store}>
+  <App />
+</Provider>
+
+// App.jsx
+<Routes>
+  <Route path="/" element={<Home players={players} />} />
+</Routes>
+```
+
+---
+
+## ✅ Best practices
+
+- Un file = una responsabilità
+- Index.css solo nel `main.jsx`
+- App.jsx = centro di controllo e routing
+- Redux = gestione centralizzata dei dati (giocatori)
+- `useState` solo per dati locali (es. selezioni temporanee)
+- Componenti piccoli e riutilizzabili
