@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { fetchPlayers } from '../store/playersSlice'
+import { fetchMatches } from '../store/matchesSlice'
 
 // ✅ Aggiungiamo anche `refreshPlayers` come prop
 function MatchForm({ players, onMatchSaved, refreshPlayers }) {
@@ -43,7 +44,8 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
       })
       .then(() => {
         alert('Partita registrata!')
-        if (onMatchSaved) onMatchSaved()  // ✅ aggiorna classifica e storico
+        dispatch(fetchPlayers()) // 🔁 aggiorna Redux e dunque la classifica in tempo reale
+        dispatch(fetchMatches()) // 🔁 aggiorna la lista delle partite
       })
       .catch(err => console.error('Errore POST /matches:', err))
   }
@@ -66,6 +68,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
         alert('Giocatore aggiunto!')
         setNewPlayerName('')
         dispatch(fetchPlayers()) // 🔁 aggiorna Redux
+        dispatch(fetchMatches()) // 🔁 aggiorna la lista delle partite
       })
       .catch(err => console.error(err))
   }

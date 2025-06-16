@@ -1,12 +1,14 @@
 // 📁 src/store/index.js
 
 import { configureStore } from '@reduxjs/toolkit'
-import playersReducer from './playersSlice'
+import playersReducer from './playersSlice' // store dei giocatori
+import matchesReducer from './matchesSlice' // store dei match
 
-// Creo lo store Redux con i "reducer" (qui solo players per ora)
+// Creo lo store Redux con i "reducer"
 const store = configureStore({
   reducer: {
-    players: playersReducer
+    players: playersReducer,
+    matches: matchesReducer
   }
 })
 

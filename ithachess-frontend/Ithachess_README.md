@@ -50,7 +50,8 @@ cd ithachess-frontend
 ```bash
 npm install
 npm install -D tailwindcss postcss autoprefixer
-npx tailwindcss init -p
+npm install -D @tailwindcss/postcss // TailwindCSS v4 che fa finalmente funzionare tailwindcss
+
 ```
 
 ### Configurazioni essenziali

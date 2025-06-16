@@ -4,13 +4,13 @@ const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 
 const app = express()
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.use(cors())
 app.use(express.json())
 
 // Percorso al file .db
-const dbPath = 'C:/Users/MarcoAndresFalotico/Documents/ithachess-platform/ithachess-backend/ithachess.db'
+const dbPath = path.join(__dirname, 'ithachess.db')
 const db = new sqlite3.Database(dbPath)
 
 // 🔹 Aggiunta giocatore
