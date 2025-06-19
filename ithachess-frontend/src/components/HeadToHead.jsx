@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import HeadToHeadChart from '../components/HeadToHeadChart'
 
+const API_URL = import.meta.env.VITE_API_BASE_URL
+
 
 function HeadToHead({ players }) {
   const [p1, setP1] = useState('')
@@ -9,7 +11,7 @@ function HeadToHead({ players }) {
 
   useEffect(() => {
     if (p1 && p2 && p1 !== p2) {
-      fetch(`http://localhost:3001/api/headtohead?p1=${p1}&p2=${p2}`)
+      fetch(`${API_URL}headtohead?p1=${p1}&p2=${p2}`)
         .then(res => res.json())
         .then(data => setMatches(data))
         .catch(err => console.error('Errore H2H:', err))
@@ -61,41 +63,37 @@ function HeadToHead({ players }) {
 
 
       {/* Statistiche + tabella */}
-      {matches.length > 0 && (
+      {matches.length > 0 ? (
         <>
           <div className="text-center mb-4">
             <p>🎯 Totale partite: <strong>{matches.length}</strong></p>
-            <p>🏁 Vittorie {players.find(p => p.id == p1)?.name}: <strong>{stats[p1]}</strong></p>
-            <p>🏁 Vittorie {players.find(p => p.id == p2)?.name}: <strong>{stats[p2]}</strong></p>
+            <p>🏁 Vittorie {name1}: <strong>{stats[p1]}</strong></p>
+            <p>🏁 Vittorie {name2}: <strong>{stats[p2]}</strong></p>
             <p>🤝 Patte: <strong>{stats.draws}</strong></p>
           </div>
-          <table className="w-full text-left border border-gray-300 bg-white text-sm">
-            <thead className="bg-gray-200">
-              <tr>
-                <th className="p-2">Data</th>
-                <th className="p-2">Bianco</th>
-                <th className="p-2">Nero</th>
-                <th className="p-2">Risultato</th>
-                <th className="p-2">Modalità</th>
-              </tr>
-            </thead>
-            <tbody>
-              {matches.map((m, i) => (
-                <tr key={i} className="border-t">
-                  <td className="p-2">{new Date(m.played_at).toLocaleString()}</td>
-                  <td className="p-2">{m.white_name}</td>
-                  <td className="p-2">{m.black_name}</td>
-                  <td className="p-2">
-                    {m.result_type === 'draw'
-                      ? '½ - ½'
-                      : m.winner_id === m.white_id ? '1 - 0' : '0 - 1'}
-                  </td>
-                  <td className="p-2">{m.mode}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          <div className="flex flex-col gap-4">
+            {matches.map((m, i) => (
+              <div key={i} className="bg-white border rounded shadow p-4 text-sm">
+                <p><strong>Data:</strong> {new Date(m.played_at).toLocaleString()}</p>
+                <p><strong>Bianco:</strong> {m.white_name}</p>
+                <p><strong>Nero:</strong> {m.black_name}</p>
+                <p><strong>Risultato:</strong> {
+                  m.result_type === 'draw'
+                    ? '½ - ½'
+                    : m.winner_id === m.white_id ? '1 - 0' : '0 - 1'
+                }</p>
+                <p><strong>Modalità:</strong> {m.mode}</p>
+              </div>
+            ))}
+          </div>
         </>
+      ) : (
+        p1 && p2 && p1 !== p2 && (
+          <div className="text-center mt-6 text-yellow-700 bg-yellow-100 border border-yellow-300 rounded p-4">
+            Nessuna partita tra i giocatori selezionati
+          </div>
+        )
       )}
     </div>
   )

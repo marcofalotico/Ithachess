@@ -2,9 +2,11 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+const API_URL = import.meta.env.VITE_API_BASE_URL
+
 // 🔁 Azione asincrona per caricare i giocatori dal backend
 export const fetchPlayers = createAsyncThunk('players/fetchPlayers', async () => {
-  const res = await fetch('http://localhost:3001/api/players')
+  const res = await fetch(`${API_URL}/players`)
   return await res.json()
 })
 

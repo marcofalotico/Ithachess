@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux'
 import { fetchPlayers } from '../store/playersSlice'
 import { fetchMatches } from '../store/matchesSlice'
 
+const API_URL = import.meta.env.VITE_API_BASE_URL
+
 // ✅ Aggiungiamo anche `refreshPlayers` come prop
 function MatchForm({ players, onMatchSaved, refreshPlayers }) {
   const [whiteId, setWhiteId] = useState('')
@@ -31,7 +33,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
       result_type: resultType,
     }
 
-    fetch('http://localhost:3001/api/matches', {
+    fetch('${API_URL}matches', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -55,7 +57,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
     e.preventDefault()
     if (!newPlayerName.trim()) return
 
-    fetch('http://localhost:3001/api/players', {
+    fetch('${API_URL}players', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newPlayerName })
