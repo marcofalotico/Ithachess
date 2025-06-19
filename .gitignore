@@ -1,0 +1,8 @@
+# Ignora le dipendenze frontend
+ithachess-frontend/node_modules/
+
+# Ignora le dipendenze backend
+ithachess-backend/node_modules/
+
+# Ignora il file del database SQLite
+ithachess-backend/ithachess.db
