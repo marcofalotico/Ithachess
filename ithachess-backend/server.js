@@ -11,13 +11,7 @@ app.use(express.json())
 
 // Percorso al file .db
 const dbPath = path.join(__dirname, 'ithachess.db')
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) return console.error(err.message)
-
-  // Se il DB è nuovo, crea le tabelle
-  db.run(`CREATE TABLE IF NOT EXISTS players (...)`)
-  db.run(`CREATE TABLE IF NOT EXISTS matches (...)`)
-})
+const db = new sqlite3.Database(dbPath)
 
 // 🔹 Aggiunta giocatore
 app.post('/api/players', (req, res) => {
