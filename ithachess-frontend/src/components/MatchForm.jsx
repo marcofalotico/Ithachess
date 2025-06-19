@@ -33,7 +33,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
       result_type: resultType,
     }
 
-    fetch('${API_URL}matches', {
+    fetch(`${API_URL}/matches`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ function MatchForm({ players, onMatchSaved, refreshPlayers }) {
     e.preventDefault()
     if (!newPlayerName.trim()) return
 
-    fetch('${API_URL}players', {
+    fetch(`${API_URL}/players`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: newPlayerName })

@@ -5,4 +5,4 @@ ithachess-frontend/node_modules/
 ithachess-backend/node_modules/
 
 # Ignora il file del database SQLite
-ithachess-backend/ithachess.db
+#ithachess-backend/ithachess.db

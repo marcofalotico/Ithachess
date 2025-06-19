@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_BASE_URL
 
 // 🔁 Azione asincrona per fetch dei match
 export const fetchMatches = createAsyncThunk('matches/fetchMatches', async () => {
-  const res = await fetch(`${API_URL}matches`)
+  const res = await fetch(`${API_URL}/matches`)
   if (!res.ok) throw new Error('Errore durante il fetch delle partite')
   return await res.json()
 })

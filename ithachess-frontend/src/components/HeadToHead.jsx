@@ -11,7 +11,7 @@ function HeadToHead({ players }) {
 
   useEffect(() => {
     if (p1 && p2 && p1 !== p2) {
-      fetch(`${API_URL}headtohead?p1=${p1}&p2=${p2}`)
+      fetch(`${API_URL}/headtohead?p1=${p1}&p2=${p2}`)
         .then(res => res.json())
         .then(data => setMatches(data))
         .catch(err => console.error('Errore H2H:', err))
